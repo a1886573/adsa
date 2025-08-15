@@ -69,6 +69,12 @@ def karatsuba(a, b, n):
 
         #returning the final formula
         return P2 * B**(2*k) + (P1 - P2 - P0) * B**k + P0
+    
+#allowed to use any method of floor division (rounded down), simplest implementation is using // as given that b (aka I2) is non 0
+def division(number1, number2):
+
+    return number1 // number2
+
 
 #set values for a and b, so need to convert I1 and I2 to integers
 a =  int(I1)
@@ -79,10 +85,12 @@ n = max(len(I1), len(I2))
 #call each function
 school_addition_result = school_method_addition(I1, I2, B)
 karatsuba_result = karatsuba(a,b,n)
+division_result = division(a,b)
 
 #printing out the results
 print("Sum: ", school_addition_result)
 print("Product: ", karatsuba_result)
+print("Division: ", division_result)
 
 
 
