@@ -46,29 +46,31 @@ def school_method_addition(number1, number2, base):
     return ''.join(result[::-1])
 
 #pseudocode of this karatsuba implemention was found and further developed on from the course lecture slides
-def karatsuba(a, b, n):
-    if n < 4:
+def karatsuba(a, b, B):
+    if a < B or b < B:
         return a * b
     #size of subproblems 
-    else:
-        k = n // 2
+
+    n = max(len(str(a)), len(str(b)))
     
-        #by dividing the first number by its base to the power of k it gets the first (forward) section of the number
-        a1 = a // B**k
-        #And using the modulo operation we can get the back portion of the number
-        a0 = a % B**k
+    k = n // 2
+    
+    #by dividing the first number by its base to the power of k it gets the first (forward) section of the number
+    a1 = a // B**k
+    #And using the modulo operation we can get the back portion of the number
+    a0 = a % B**k
 
-        #same logic applied to partition number 2
-        b1 = b // B**k
-        b0 = b % B**k
+    #same logic applied to partition number 2
+    b1 = b // B**k
+    b0 = b % B**k
    
-        #initiating three different recursive steps (/subproblems) of the karatsuba algorithm
-        P0 = karatsuba(a0,b0, k)
-        P1 = karatsuba(a1,b1, k)
-        P2 = karatsuba(a0+a1,b0+b1, k)
+    #initiating three different recursive steps (/subproblems) of the karatsuba algorithm
+    P0 = karatsuba(a0,b0, B)
+    P1 = karatsuba(a1,b1, B)
+    P2 = karatsuba(a0+a1,b0+b1, B)
 
-        #returning the final formula
-        return P2 * B**(2*k) + (P1 - P2 - P0) * B**k + P0
+    #returning the final formula
+    return P2 * B**(2*k) + (P2 - P1 - P0) * B**k + P0
     
 #allowed to use any method of floor division (rounded down), simplest implementation is using // as given that b (aka I2) is non 0
 def division(number1, number2):
@@ -79,12 +81,10 @@ def division(number1, number2):
 #set values for a and b, so need to convert I1 and I2 to integers
 a =  int(I1)
 b =  int(I2)
-#set n to the max length of either a or b
-n = max(len(I1), len(I2))
 
 #call each function
 school_addition_result = school_method_addition(I1, I2, B)
-karatsuba_result = karatsuba(a,b,n)
+karatsuba_result = karatsuba(a,b,B)
 division_result = division(a,b)
 
 #printing out the results
