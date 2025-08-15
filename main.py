@@ -1,3 +1,4 @@
+#a1886573 Aidan Matkovic last edited 15/8/25: ADSA ASSIGNMENT 1
 
 #convert input to strings
 data  = input()
@@ -68,6 +69,21 @@ def karatsuba(a, b, n):
 
         #returning the final formula
         return P2 * B**(2*k) + (P1 - P2 - P0) * B**k + P0
+
+#set values for a and b, so need to convert I1 and I2 to integers
+a =  int(I1)
+b =  int(I2)
+#set n to the max length of either a or b
+n = max(len(I1), len(I2))
+
+#call each function
+school_addition_result = school_method_addition(I1, I2, B)
+karatsuba_result = karatsuba(a,b,n)
+
+#printing out the results
+print("Sum: ", school_addition_result)
+print("Product: ", karatsuba_result)
+
 
 
 
