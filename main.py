@@ -54,26 +54,33 @@ def karatsuba(a, b, n):
     k = n // 2
     
     #by dividing the first number by its base to the power of k it gets the first (forward) section of the number
-    a1 = a // B**k
+    a1 = a // 10**k
     #And using the modulo operation we can get the back portion of the number
-    a0 = a % B**k
+    a0 = a % 10**k
 
     #same logic applied to partition number 2
-    b1 = b // B**k
-    b0 = b % B**k
+    b1 = b // 10**k
+    b0 = b % 10**k
    
     #initiating three different recursive steps (/subproblems) of the karatsuba algorithm
-    P0 = karatsuba(a0,b0, B)
-    P1 = karatsuba(a1,b1, B)
-    P2 = karatsuba(a0+a1,b0+b1, B)
+    P0 = karatsuba(a0,b0, k)
+    P1 = karatsuba(a1,b1, k)
+    P2 = karatsuba(a0+a1,b0+b1, k)
 
     #returning the final formula
-    return P2 * B**(2*k) + (P1 - P2 - P0) * B**k + P0
+    return P2 * 10**(2*k) + (P1 - P2 - P0) * 10**k + P0
     
 #allowed to use any method of floor division (rounded down), simplest implementation is using // as given that b (aka I2) is non 0
 def division(number1, number2):
-
-    return number1 // number2
+    num = number1
+    denom = int(number2)
+    result = []
+    remainder = 0
+    for digit in num:
+        remainder = remainder * 10 + int(digit)
+        result.append(str(remainder // denom))
+        remainder %= denom
+    return ''.join(result).lstrip('0') or '0'
 
 
 #set values for a and b, so need to convert I1 and I2 to integers
@@ -84,10 +91,11 @@ n = max(len(str(a)), len(str(b)))
 #call each function
 school_addition_result = school_method_addition(I1, I2, B)
 karatsuba_result = karatsuba(a,b,n)
-division_result = division(a,b)
+division_result = division(I1,I2)
 
 #printing out the results
 print(school_addition_result, karatsuba_result, division_result)
+
 
 
 
