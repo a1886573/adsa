@@ -142,13 +142,39 @@ def karatsuba(a, b):
 
     return result
 
+#no real restrictions on division process, will implement long division as its relativelt simple
+def division(num1, num2, base):
+    
+    #converting strings to digits
+    num1_digits = [int(d) for d in num1]
+
+    #converts any base to decimal based based on num2 which is the divisor 
+    divisor = int(num2,base)
+
+    result = []
+    remainder = 0
+
+    for digit in num1_digits:
+        #formula for the basis of long division, the remainder gets updated after iterating through each digit where the result is shifted up by being multiplied by the base
+        remainder = remainder * base + digit
+        
+        #appends the quotient into the result
+        result.append(str(remainder // divisor))
+        
+        #updates the remainder for the next iteration
+        remainder %= divisor 
+    
+    #converts into a single string and strips leading zeros
+    return ''.join(result).lstrip('0') or '0'
+
 
 #call each function
 school_addition_result = school_method_addition(I1, I2, B)
 karatsuba_result = karatsuba(I1,I2)
+division_result = division(I1,I2,B)
 
 #printing out the results
-print(school_addition_result, karatsuba_result)
+print(school_addition_result, karatsuba_result, division_result)
 
 
 
