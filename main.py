@@ -47,7 +47,7 @@ def school_method_addition(number1, number2, base):
 
 #pseudocode of this karatsuba implemention was found and further developed on from the course lecture slides
 def karatsuba(a, b, n):
-    if a < B or b < B:
+    if n < 4:
         return a * b
     #size of subproblems 
     
