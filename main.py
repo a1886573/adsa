@@ -71,7 +71,7 @@ def karatsuba(a, b):
     P2 = karatsuba(a0+a1,b0+b1)
 
     #returning the final formula
-    return P2 * B**(2*k) + (P1 - P2 - P0) * B**k + P0
+    return P1 * B**(2*k) + (P2 - P1 - P0) * B**k + P0
     
 #allowed to use any method of floor division (rounded down), assumed I2 is not 0
 def division(number1, number2):
