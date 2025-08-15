@@ -47,28 +47,31 @@ def school_method_addition(number1, number2, base):
 
 #pseudocode of this karatsuba implemention was found and further developed on from the course lecture slides
 def karatsuba(a, b):
-    if a < 10 or b < 10:
-        return a * b
+
+    a = str(a)
+    b = str(b)
+
+    if len(a) == 1 or len(b) == 1:
+        return int(a) * int(b)
+    
     #size of subproblems
-    n = max(len(str(a)), len(str(b)))
+    n = max(len(a), len(b))
     k = n // 2
     
-    #by dividing the first number by its base to the power of k it gets the first (forward) section of the number
-    a1 = a // 10**k
-    #And using the modulo operation we can get the back portion of the number
-    a0 = a % 10**k
+    #fill with zeros
+    a = a.zfill(n)
+    b = b.zfill(n)
 
-    #same logic applied to partition number 2
-    b1 = b // 10**k
-    b0 = b % 10**k
-   
+    a1, a0 = int(a[:-k]), int(a[-k:])
+    b1, b0 = int(b[:-k]), int(b[-k:])
+
     #initiating three different recursive steps (/subproblems) of the karatsuba algorithm
     P0 = karatsuba(a0,b0)
     P1 = karatsuba(a1,b1)
     P2 = karatsuba(a0+a1,b0+b1)
 
     #returning the final formula
-    return P2 * 10**(2*k) + (P1 - P2 - P0) * 10**k + P0
+    return P2 * B**(2*k) + (P1 - P2 - P0) * B**k + P0
     
 #allowed to use any method of floor division (rounded down), assumed I2 is not 0
 def division(number1, number2):
