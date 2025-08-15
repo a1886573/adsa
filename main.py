@@ -88,9 +88,8 @@ karatsuba_result = karatsuba(a,b,n)
 division_result = division(a,b)
 
 #printing out the results
-print("Sum: ", school_addition_result)
-print("Product: ", karatsuba_result)
-print("Division: ", division_result)
+print(school_addition_result, karatsuba_result, division_result)
+
 
 
 
