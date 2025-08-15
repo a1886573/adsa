@@ -46,11 +46,11 @@ def school_method_addition(number1, number2, base):
     return ''.join(result[::-1])
 
 #pseudocode of this karatsuba implemention was found and further developed on from the course lecture slides
-def karatsuba(a, b, n):
-    if n < 4:
+def karatsuba(a, b):
+    if a < 10 or b < 10:
         return a * b
-    #size of subproblems 
-    
+    #size of subproblems
+    n = max(len(str(a)), len(str(b)))
     k = n // 2
     
     #by dividing the first number by its base to the power of k it gets the first (forward) section of the number
@@ -63,14 +63,14 @@ def karatsuba(a, b, n):
     b0 = b % 10**k
    
     #initiating three different recursive steps (/subproblems) of the karatsuba algorithm
-    P0 = karatsuba(a0,b0, k)
-    P1 = karatsuba(a1,b1, k)
-    P2 = karatsuba(a0+a1,b0+b1, k)
+    P0 = karatsuba(a0,b0)
+    P1 = karatsuba(a1,b1)
+    P2 = karatsuba(a0+a1,b0+b1)
 
     #returning the final formula
     return P2 * 10**(2*k) + (P1 - P2 - P0) * 10**k + P0
     
-#allowed to use any method of floor division (rounded down), simplest implementation is using // as given that b (aka I2) is non 0
+#allowed to use any method of floor division (rounded down), assumed I2 is not 0
 def division(number1, number2):
     num = number1
     denom = int(number2)
@@ -80,17 +80,18 @@ def division(number1, number2):
         remainder = remainder * 10 + int(digit)
         result.append(str(remainder // denom))
         remainder %= denom
+    
+    # Remove leading zeros, return '0' if result is empty
     return ''.join(result).lstrip('0') or '0'
 
 
 #set values for a and b, so need to convert I1 and I2 to integers
 a =  int(I1)
 b =  int(I2)
-n = max(len(str(a)), len(str(b)))
 
 #call each function
 school_addition_result = school_method_addition(I1, I2, B)
-karatsuba_result = karatsuba(a,b,n)
+karatsuba_result = karatsuba(a,b)
 division_result = division(I1,I2)
 
 #printing out the results
