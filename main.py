@@ -45,26 +45,29 @@ def school_method_addition(number1, number2, base):
     return ''.join(result[::-1])
 
 #pseudocode of this karatsuba implemention was found and further developed on from the course lecture slides
-def karatsuba(number1, number2, n):
+def karatsuba(a, b, n):
+    if n < 4:
+        return a * b
     #size of subproblems 
-    k = n // 2
+    else:
+        k = n // 2
     
-    #by dividing the first number by its base to the power of k it gets the first (forward) section of the number
-    a1 = number1 // B**k
-    #And using the modulo operation we can get the back portion of the number
-    a0 = number1 % B**k
+        #by dividing the first number by its base to the power of k it gets the first (forward) section of the number
+        a1 = a // B**k
+        #And using the modulo operation we can get the back portion of the number
+        a0 = a % B**k
 
-    #same logic applied to partition number 2
-    b1 = number2 // B**k
-    b0 = number2 % B**k
+        #same logic applied to partition number 2
+        b1 = b // B**k
+        b0 = b % B**k
    
-    #initiating three different recursive steps (/subproblems) of the karatsuba algorithm
-    P0 = karatsuba(a0,b0, k)
-    P1 = karatsuba(a1,b1, k)
-    P2 = karatsuba(a0+a1,b0+b1, k)
+        #initiating three different recursive steps (/subproblems) of the karatsuba algorithm
+        P0 = karatsuba(a0,b0, k)
+        P1 = karatsuba(a1,b1, k)
+        P2 = karatsuba(a0+a1,b0+b1, k)
 
-    #returning the final formula
-    return P2 * B**(2*k) + (P1 - P2 - P0) * B**k + P0
+        #returning the final formula
+        return P2 * B**(2*k) + (P1 - P2 - P0) * B**k + P0
 
 
 
