@@ -1,4 +1,4 @@
-#a1886573 Aidan Matkovic last edited 15/8/25: ADSA ASSIGNMENT 1
+#a1886573 Aidan Matkovic last edited 15/8/25 11:19pm : ADSA ASSIGNMENT 1
 
 #convert input to strings
 data  = input()
