@@ -20,7 +20,7 @@ def school_method_addition(number1, number2, base):
     result = []
     
     #loop from max_length-1 (last digit) to index 0 (hence -1 to include it) and a step of -1 to descend
-    for i in range(max_length -1, -1, -1):
+    for i in range(max_length -1, -1, -1):  
         #setting a character of number 1 to a digit, starting from i (back)
         first_digit = int(number1[i])
         #setting a character of number 2 to a digit
