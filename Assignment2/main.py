@@ -1,4 +1,4 @@
-#a1886573 Aidan Matkovic last edited 12/9/25 10:06pm : ADSA ASSIGNMENT 2 : AVL TREES
+#a1886573 Aidan Matkovic last edited 12/9/25 10:23pm : ADSA ASSIGNMENT 2 : AVL TREES
 
 #initialising a base node class, with left and right sub nodes, a key and a height
 class AVL_Node:
@@ -15,7 +15,7 @@ class AVL_Tree:
     #calculates the tree height by traversing down each subtree and taking the max (+1 to accomodate for the root)
     def tree_Height(self,node):
         if node is None:
-           return -1
+           return 0
         
         return 1 + max(self.tree_Height(node.leftNode), self.tree_Height(node.rightNode))
     
@@ -105,24 +105,27 @@ class AVL_Tree:
         #search right subtree
         elif key > root.key:
             root.rightNode = self.delete(root.rightNode, key)
-        #then node found
+        #then node found, before it returned the child immediately which doesnt work, so it had to be modified with a temp being minNode before deleting
         else: 
-            if not root.leftNode:
-                #node is replaced with with right child
-                return root.rightNode
-            elif not root.rightNode:
+            if root.leftNode is None:
+                minNode = root.rightNode
+                root = None
+                return minNode
+            #node is replaced with with right child
+            elif root.rightNode is None:
                 #or replaced with left
-                return root.leftNode
+                minNode = root.leftNode
+                root = None
+                return minNode
         
         #for when both children exist
         #to delete, swaps with the rightmost element at the bottom of the tree, then deletes
-        if root.leftNode and root.rightNode:
             minNode = self.getMin(root.rightNode)
             root.key = minNode.key
             root.rightNode = self.delete(root.rightNode, minNode.key)
         
         #reevalutes tree height and calculates balance for later recorrection if needed
-        root.height = self.tree_Height(root)
+        root.height = 1 + max(self.tree_Height(root.leftNode), self.tree_Height(root.rightNode))
         balanced  = self.balance(root)
         
         #repeat rotations, as done in insert function but as key is deleted will refer to the balance function output
@@ -131,7 +134,7 @@ class AVL_Tree:
             return self.right_rotate(root)
         
         # Right right rotation
-        if balanced < -1 and self.balance(root.rightNode) >= 0:
+        if balanced < -1 and self.balance(root.rightNode) <= 0:
             return self.left_rotate(root)
         
         # Left right rotation
@@ -140,7 +143,7 @@ class AVL_Tree:
             return self.right_rotate(root)
         
         #Right left rotation
-        if balanced < -1 and self.balance(root.rightNode) > 0:
+        if balanced < -1 and self.balance(root.rightNode) < 0:
             root.rightNode = self.right_rotate(root.rightNode)
             return self.left_rotate(root)
         
