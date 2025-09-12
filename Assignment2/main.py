@@ -1,4 +1,4 @@
-#a1886573 Aidan Matkovic last edited 12/9/25 9:39pm : ADSA ASSIGNMENT 2 : AVL TREES
+#a1886573 Aidan Matkovic last edited 12/9/25 10:06pm : ADSA ASSIGNMENT 2 : AVL TREES
 
 #initialising a base node class, with left and right sub nodes, a key and a height
 class AVL_Node:
@@ -42,7 +42,7 @@ class AVL_Tree:
         node = x.rightNode
         x.rightNode = y
         y.leftNode = node
-        y.height = 1 + max(self.tree_Height(y.leftNodde), self.tree_Height(y.rightNode))
+        y.height = 1 + max(self.tree_Height(y.leftNode), self.tree_Height(y.rightNode))
         x.height = 1 + max(self.tree_Height(x.leftNode), self.tree_Height(x.rightNode))
         return x
     
@@ -116,9 +116,10 @@ class AVL_Tree:
         
         #for when both children exist
         #to delete, swaps with the rightmost element at the bottom of the tree, then deletes
-        minNode = self.getMin(root.rightNode)
-        root.key = minNode.key
-        root.rightNode = self.delete(root.rightNode, minNode.key)
+        if root.leftNode and root.rightNode:
+            minNode = self.getMin(root.rightNode)
+            root.key = minNode.key
+            root.rightNode = self.delete(root.rightNode, minNode.key)
         
         #reevalutes tree height and calculates balance for later recorrection if needed
         root.height = self.tree_Height(root)
