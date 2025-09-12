@@ -27,23 +27,23 @@ class AVL_Tree:
         
     #the following function performs a left rotate, where x moves down to the left and y becomes the new root, moving anticlockwise
     def left_rotate(self, x):
-        y = x.right
-        node = y.left
-        y.left = x
-        x.right = node
-        y.height = 1 + max(self.tree_Height(y.left), self.tree_Height(y.right))
-        x.height = 1 + max(self.tree_Height(x.left), self.tree_Height(x.right))
+        y = x.rightNode
+        node = y.leftNode
+        y.leftNode = x
+        x.rightNode = node
+        y.height = 1 + max(self.tree_Height(y.leftNode), self.tree_Height(y.rightNode))
+        x.height = 1 + max(self.tree_Height(x.leftNode), self.tree_Height(x.rightNode))
         return y
        
        
     #the right rotate shifts the tree clockwise and moves y down, where then x becomes the new root of the subtree
     def right_rotate(self, y):
-        x = y.left
-        node = x.right
-        x.right = y
-        y.left = node
-        y.height = 1 + max(self.tree_Height(y.left), self.tree_Height(y.right))
-        x.height = 1 + max(self.tree_Height(x.left), self.tree_Height(x.right))
+        x = y.leftNode
+        node = x.rightNode
+        x.rightNode = y
+        y.leftNode = node
+        y.height = 1 + max(self.tree_Height(y.leftNodde), self.tree_Height(y.rightNode))
+        x.height = 1 + max(self.tree_Height(x.leftNode), self.tree_Height(x.rightNode))
         return x
     
 
@@ -166,7 +166,53 @@ class AVL_Tree:
             print(root.key, end = " ")
             self.inorder(root.rightNode) 
 
+#main function to process the inputs
+def main():
+    #firstly need to split up the command line and disect each of the tree modifications and order than it will be printed in
+    commandLine = input().lstrip()
+    parts = commandLine.split()
+    #as the order is last in line, => -1
+    printingOrder = parts[-1]
+    treeModifications = parts[:-1]
 
+    tree = AVL_Tree()
+    root = None
+
+    for move in treeModifications:
+        #first character either A or D
+        modification = move[0]
+        #then follows the number
+        number = int(move[1:])
+
+        if modification == 'A':
+            #if A then inserts
+            root = tree.insert(root, number)
+        elif modification == 'D':
+            #if D then deletes
+            root = tree.delete(root, number)
+    
+    #determines which order to print tree in 
+    if not root:
+        print("EMPTY")
+    elif printingOrder == "POST":
+        tree.postorder(root)
+        print()
+    elif printingOrder == "PRE":
+        tree.preorder(root)
+        print()
+    elif printingOrder == "IN":
+        tree.inorder(root)
+        print()
+#call main
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+    
 
 
         
