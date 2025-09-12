@@ -39,8 +39,8 @@ class AVL_Tree:
         node = x.right
         x.right = y
         y.left = node
-        y.height = 1 + max(self.getHeight(y.left), self.getHeight(y.right))
-        x.height = 1 + max(self.getHeight(x.left), self.getHeight(x.right))
+        y.height = 1 + max(self.tree_Height(y.left), self.tree_Height(y.right))
+        x.height = 1 + max(self.tree_Height(x.left), self.tree_Height(x.right))
         return x
     
 
@@ -55,7 +55,7 @@ class AVL_Tree:
             return root
         
 
-        height = self.tree_height(root)
+        root.height = self.tree_Height(root)
         balance = self.balance(root)
         
         # Left left rotation
@@ -147,11 +147,24 @@ class AVL_Tree:
         
         return root
 
-    def preorder():
+    def preorder(self, root):
+        if root: 
+            print(root.key, end = " ")
+            self.preorder(root.leftNode)
+            self.preorder(root.rightNode)
         
-    def postorder():
+    def postorder(self, root):
+        if root:
+            self.postorder(root.leftNode)
+            self.postorder(root.rightNode)
+            print(root.key, end = " ")
         
-    def inorder():
+    def inorder(self, root):
+        if root:
+            self.inorder(root.leftNode)
+            print(root.key, end = " ")
+            self.inorder(root.rightNode)
+
         
 
   
