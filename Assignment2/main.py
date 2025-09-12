@@ -94,9 +94,58 @@ class AVL_Tree:
         #if greater than search in right subtree
         elif key > root.key:
             return self.find(root.rightNode, key)
+    
+    #to get the min, the left nodes will be traversed until the bottom of the tree is reached, as the min number is always to the left
+    def getMin(self, node):
+        current = node
+        while current.leftNode:
+            current = current.leftNode
+        return current
         
-    def delete();
-         
+    def delete(self, root, key):
+
+        removeNode = self.find(root, key)
+
+        if not removeNode:
+            return root
+        
+        if key < root.key:
+            root.leftNode = self.delete(root.leftNode, key)
+        elif key > root.key:
+            root.rightNode = self.delete(root.rightNode, key)
+        else: 
+            if not root.leftNode:
+                return root.rightNode
+            elif not root.rightNode:
+                return root.leftNode
+            
+        minNode = self.getMin(root.rightNode)
+        root.key = minNode.key
+        root.rightNode = self.delete(root.rightNode, minNode.key)
+
+        root.height = self.tree_Height(root)
+        balanced  = self.balance(root)
+        
+        #repeat rotations, as done in insert function but as key is deleted will refer to the balance function output
+        # Left left rotation
+        if balanced > 1 and self.balance(root.leftNode) >= 0:
+            return self.right_rotate(root)
+        
+        # Right right rotation
+        if balanced < -1 and self.balance(root.rightNode) >= 0:
+            return self.left_rotate(root)
+        
+        # Left right rotation
+        if balanced > 1 and self.balance(root.leftNode) < 0:
+            root.leftNode = self.left_rotate(root.leftNode)
+            return self.right_rotate(root)
+        
+        #Right left rotation
+        if balanced < -1 and self.balance(root.rightNode) > 0:
+            root.rightNode = self.right_rotate(root.rightNode)
+            return self.left_rotate(root)
+        
+        return root
 
     def preorder():
         
