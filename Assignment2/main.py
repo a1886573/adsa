@@ -1,4 +1,4 @@
-#a1886573 Aidan Matkovic last edited 12/9/25 10:23pm : ADSA ASSIGNMENT 2 : AVL TREES
+#a1886573 Aidan Matkovic last edited 12/9/25 11:26pm : ADSA ASSIGNMENT 2 : AVL TREES
 
 #initialising a base node class, with left and right sub nodes, a key and a height
 class AVL_Node:
@@ -12,41 +12,49 @@ class AVL_Tree:
     #constructor 
     def __init__(self):
         self.root = None
-    #calculates the tree height by traversing down each subtree and taking the max (+1 to accomodate for the root)
+    
+    #gets the height, if node is not None then returns 0
     def tree_Height(self,node):
-        if node is None:
-           return 0
-        
-        return 1 + max(self.tree_Height(node.leftNode), self.tree_Height(node.rightNode))
+        return node.height if node else 0
     
     #this parameter determines whether the tree needs balancing, based on the difference in height of the left and right subtree
     def balance(self,node):
-        if node is None:
+        if not node:
             return 0
         return self.tree_Height(node.leftNode) - self.tree_Height(node.rightNode)
         
-    #the following function performs a left rotate, where x moves down to the left and y becomes the new root, moving anticlockwise
-    def left_rotate(self, x):
-        y = x.rightNode
-        node = y.leftNode
-        y.leftNode = x
-        x.rightNode = node
-        y.height = 1 + max(self.tree_Height(y.leftNode), self.tree_Height(y.rightNode))
-        x.height = 1 + max(self.tree_Height(x.leftNode), self.tree_Height(x.rightNode))
-        return y
-       
-       
-    #the right rotate shifts the tree clockwise and moves y down, where then x becomes the new root of the subtree
-    def right_rotate(self, y):
-        x = y.leftNode
-        node = x.rightNode
-        x.rightNode = y
-        y.leftNode = node
-        y.height = 1 + max(self.tree_Height(y.leftNode), self.tree_Height(y.rightNode))
-        x.height = 1 + max(self.tree_Height(x.leftNode), self.tree_Height(x.rightNode))
-        return x
-    
+    #the following function performs a left rotate, where a node n1 moves down to the left and node n2 becomes the new root, moving anticlockwise
+    def left_rotate(self, n1):
+        #node 2 is the right child of n1
+        n2 = n1.rightNode
+        tempNode = n2.leftNode
+        
+        #then node 1 is moved to the left and now becomes the left child of node 2, n2
+        n2.leftNode = n1
+        n1.rightNode = tempNode
 
+        #calculates the tree height by traversing down each subtree and taking the max (+1 to accomodate for the root)
+        n1.height = 1 + max(self.tree_Height(n1.leftNode), self.tree_Height(n1.rightNode))
+        n2.height = 1 + max(self.tree_Height(n2.leftNode), self.tree_Height(n2.rightNode))
+
+        return n2
+
+    #the right rotate shifts the tree clockwise and moves a node, n2 to the right, where then n1 becomes the new root of the subtree
+    def right_rotate(self, n2):
+        n1 = n2.leftNode
+        tempNode = n1.rightNode
+        
+        #node 2 is now the right child of n1
+        n1.rightNode = n2
+        n2.leftNode = tempNode
+
+        n2.height = 1 + max(self.tree_Height(n2.leftNode), self.tree_Height(n2.rightNode))
+        n1.height = 1 + max(self.tree_Height(n1.leftNode), self.tree_Height(n1.rightNode))
+
+        return n1
+    
+    
+    #insert function
     def insert(self,root,key):
      
         if not root:
@@ -61,7 +69,7 @@ class AVL_Tree:
             return root
         
         #reevaluate the height and balance parameters
-        root.height = self.tree_Height(root)
+        root.height = 1 + max(self.tree_Height(root.leftNode), self.tree_Height(root.rightNode))
         balance = self.balance(root)
         
         #based on the difference of height between the left and right subtrees and the key,
@@ -87,13 +95,14 @@ class AVL_Tree:
         return root
 
     
-    #to get the min, the left nodes will be traversed until the bottom of the tree is reached, as the min number is always to the left
-    def getMin(self, node):
+    #to get the max, the right nodes will be traversed until the bottom of the tree is reached, as the max number is always to the right
+    def getMax(self, node):
         current = node
-        while current.leftNode:
-            current = current.leftNode
+        while current.rightNode:
+            current = current.rightNode
         return current
-        
+    
+    #delete function
     def delete(self, root, key):
 
         if not root:
@@ -105,45 +114,42 @@ class AVL_Tree:
         #search right subtree
         elif key > root.key:
             root.rightNode = self.delete(root.rightNode, key)
-        #then node found, before it returned the child immediately which doesnt work, so it had to be modified with a temp being minNode before deleting
+        #then node found
         else: 
-            if root.leftNode is None:
-                minNode = root.rightNode
-                root = None
-                return minNode
+            if not root.leftNode:
+                return root.rightNode
             #node is replaced with with right child
-            elif root.rightNode is None:
+            elif not root.rightNode:
                 #or replaced with left
-                minNode = root.leftNode
-                root = None
-                return minNode
-        
-        #for when both children exist
-        #to delete, swaps with the rightmost element at the bottom of the tree, then deletes
-            minNode = self.getMin(root.rightNode)
-            root.key = minNode.key
-            root.rightNode = self.delete(root.rightNode, minNode.key)
+                return root.leftNode
+                #for when both children exist
+                #to delete, swaps with the right most element at the bottom of the tree, then deletes
+                #get the predecessor
+            else:
+                temp = self.getMax(root.leftNode)
+                root.key = temp.key
+                root.leftNode = self.delete(root.leftNode, temp.key)
         
         #reevalutes tree height and calculates balance for later recorrection if needed
         root.height = 1 + max(self.tree_Height(root.leftNode), self.tree_Height(root.rightNode))
-        balanced  = self.balance(root)
+        balance  = self.balance(root)
         
         #repeat rotations, as done in insert function but as key is deleted will refer to the balance function output
         # Left left rotation
-        if balanced > 1 and self.balance(root.leftNode) >= 0:
+        if balance > 1 and self.balance(root.leftNode) >= 0:
             return self.right_rotate(root)
         
-        # Right right rotation
-        if balanced < -1 and self.balance(root.rightNode) <= 0:
-            return self.left_rotate(root)
-        
         # Left right rotation
-        if balanced > 1 and self.balance(root.leftNode) < 0:
+        if balance > 1 and self.balance(root.leftNode) < 0:
             root.leftNode = self.left_rotate(root.leftNode)
             return self.right_rotate(root)
         
+        # Right right rotation
+        if balance < -1 and self.balance(root.rightNode) <= 0:
+            return self.left_rotate(root)
+        
         #Right left rotation
-        if balanced < -1 and self.balance(root.rightNode) < 0:
+        if balance < -1 and self.balance(root.rightNode) > 0:
             root.rightNode = self.right_rotate(root.rightNode)
             return self.left_rotate(root)
         
@@ -152,7 +158,7 @@ class AVL_Tree:
     #preorder defined as root->left->right, so calls and prints in that order
     def preorder(self, root):
         if root: 
-            print(root.key, end = " ")
+            print(root.key, end=" ")
             self.preorder(root.leftNode)
             self.preorder(root.rightNode)
 
@@ -161,13 +167,13 @@ class AVL_Tree:
         if root:
             self.postorder(root.leftNode)
             self.postorder(root.rightNode)
-            print(root.key, end = " ")
+            print(root.key, end=" ")
 
     #inorder, left->root->right
     def inorder(self, root):
         if root:
             self.inorder(root.leftNode)
-            print(root.key, end = " ")
+            print(root.key, end=" ")
             self.inorder(root.rightNode) 
 
 #main function to process the inputs
