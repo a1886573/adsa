@@ -65,7 +65,7 @@ def deletion(table, word):
         return
     
     #find the table index of that word
-    index = search[table,word]
+    index = search(table,word)
     #then set the status of that slot to tombstone.
     slot = table[index]
     slot["status"] = "tombstone"
